@@ -1,0 +1,201 @@
+/* ------------------------------------------------------------------ */
+/* Landing page hero — scoped to .lp-* classes only                    */
+/* ------------------------------------------------------------------ */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap');
+
+.lp-hero {
+    --lp-green: #3fa672;
+    --lp-green-dark: #1f7a4c;
+    --lp-green-bg: #e1f5ea;
+    --lp-red: #e2574c;
+    --lp-orange: #f2a33e;
+    --lp-blue: #4d7ff2;
+    --lp-purple: #8b6fd9;
+    --lp-card-bg: #f7f6f4;
+    --lp-track-bg: #ece9e2;
+
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.lp-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--lp-green-bg);
+    color: var(--lp-green-dark);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    margin-bottom: 1.75rem;
+}
+
+.lp-hero-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--lp-green);
+    flex-shrink: 0;
+}
+
+.lp-hero-title {
+    font-family: 'Baloo 2', var(--font-body);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+}
+
+.lp-hero-title-accent {
+    color: var(--lp-green);
+}
+
+.lp-hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+}
+
+.lp-hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+}
+
+.lp-btn {
+    display: inline-block;
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.9rem 1.75rem;
+    border-radius: 12px;
+    text-decoration: none;
+}
+
+.lp-hero-visual {
+    width: 100%;
+    background: var(--lp-card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.75rem;
+}
+
+.lp-window-dots {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+}
+
+.lp-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+}
+
+.lp-dot-red { background: var(--lp-red); }
+.lp-dot-yellow { background: var(--lp-orange); }
+.lp-dot-green { background: #a3d9b6; }
+
+.lp-stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.lp-stat-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.lp-stat-label {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    margin-bottom: 0.5rem;
+}
+
+.lp-stat-value {
+    font-family: var(--font-body);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+}
+
+.lp-stat-delta {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.lp-stat-delta-down { color: var(--lp-red); }
+.lp-stat-delta-up { color: var(--lp-green); }
+.lp-stat-delta-neutral { color: var(--ink-muted); }
+
+.lp-progress-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.lp-progress-row {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    align-items: center;
+    gap: 1rem;
+}
+
+.lp-progress-label {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    text-align: left;
+}
+
+.lp-progress-track {
+    height: 10px;
+    background: var(--lp-track-bg);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.lp-progress-bar {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.lp-progress-bar-food { background: var(--lp-orange); }
+.lp-progress-bar-travel { background: var(--lp-blue); }
+.lp-progress-bar-bills { background: var(--lp-purple); }
+
+@media (max-width: 640px) {
+    .lp-hero { padding: 3rem 1.25rem 3.5rem; }
+    .lp-hero-actions { flex-direction: column; width: 100%; }
+    .lp-btn { text-align: center; }
+    .lp-stat-row { grid-template-columns: 1fr; }
+}
