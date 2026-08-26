@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy — Spendly{% endblock %}
+
+{% block content %}
+
+<section class="legal-section">
+    <div class="legal-inner">
+
+        <div class="legal-header">
+            <div class="hero-badge">Legal</div>
+            <h1 class="legal-title">Privacy <em>Policy</em></h1>
+            <p class="legal-updated">Last updated 26 August 2026</p>
+        </div>
+
+        <div class="legal-card">
+            <article class="legal-block">
+                <h2 class="legal-heading"><span class="legal-num">01</span> Data We Collect</h2>
+                <p>
+                    When you create a Spendly account, we collect basic account information such
+                    as your name and email address. As you use the app, we also store the expense
+                    records you enter, including amounts, categories, dates, and descriptions. We
+                    do not collect more than what is needed to provide the service.
+                </p>
+            </article>
+
+            <article class="legal-block">
+                <h2 class="legal-heading"><span class="legal-num">02</span> How We Use Your Data</h2>
+                <p>
+                    Your data is used solely to operate Spendly: authenticating your account,
+                    displaying your expenses, and generating the summaries and category breakdowns
+                    you see in the app. We do not use your financial data for advertising, and we
+                    do not sell it to third parties.
+                </p>
+            </article>
+
+            <article class="legal-block">
+                <h2 class="legal-heading"><span class="legal-num">03</span> Data Storage</h2>
+                <p>
+                    Your account and expense data are stored in our database and protected with
+                    reasonable technical safeguards. You may request deletion of your account and
+                    all associated data at any time, after which your records are permanently
+                    removed from our systems.
+                </p>
+            </article>
+
+            <article class="legal-block">
+                <h2 class="legal-heading"><span class="legal-num">04</span> Third Party Services</h2>
+                <p>
+                    Spendly does not share your personal financial data with third parties for
+                    marketing purposes. We may rely on trusted infrastructure providers, such as
+                    hosting and database services, solely to operate the app — these providers do
+                    not have independent rights to use your data.
+                </p>
+            </article>
+
+            <article class="legal-block">
+                <h2 class="legal-heading"><span class="legal-num">05</span> Contact Us</h2>
+                <p>
+                    If you have questions about this Privacy Policy or how your data is handled,
+                    you can reach out to us through the contact details provided in your account
+                    settings, and we'll be happy to help.
+                </p>
+            </article>
+        </div>
+
+        <p class="legal-footnote">
+            Questions about this policy? <a href="{{ url_for('landing') }}">Return to the homepage</a>
+        </p>
+
+    </div>
+</section>
+
+{% endblock %}
