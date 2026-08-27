@@ -2,6 +2,68 @@
 
 {% block title %}Spendly — Track Every Rupee{% endblock %}
 
+{% block head %}
+<style>
+    .lp-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 15, 15, 0.75);
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        z-index: 1000;
+    }
+
+    .lp-modal-overlay.is-open { display: flex; }
+
+    .lp-modal {
+        position: relative;
+        width: 100%;
+        max-width: 840px;
+        background: #000;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .lp-modal-video-wrap {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+    }
+
+    .lp-modal-iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+    .lp-modal-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        border: none;
+        font-size: 1.25rem;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    .lp-modal-close:hover { background: rgba(0, 0, 0, 0.85); }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <section class="lp-hero">
@@ -19,7 +81,7 @@
     </p>
     <div class="lp-hero-actions">
         <a href="{{ url_for('register') }}" class="lp-btn">Create free account</a>
-        <a href="#" class="lp-btn">See how it works</a>
+        <a href="#" id="lp-how-it-works-btn" class="lp-btn">See how it works</a>
     </div>
 
     <div class="lp-hero-visual">
@@ -70,6 +132,22 @@
     </div>
 </section>
 
+<div class="lp-modal-overlay" id="lp-modal-overlay">
+    <div class="lp-modal">
+        <button type="button" class="lp-modal-close" id="lp-modal-close" aria-label="Close video">&times;</button>
+        <div class="lp-modal-video-wrap">
+            <iframe
+                id="lp-modal-iframe"
+                class="lp-modal-iframe"
+                src=""
+                title="How Spendly works"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</div>
+
 <section class="features">
     <div class="features-inner">
         <div class="feature-card">
@@ -98,4 +176,44 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+    (function () {
+        var YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/dQw4w9WgXcQ";
+
+        var openBtn = document.getElementById("lp-how-it-works-btn");
+        var closeBtn = document.getElementById("lp-modal-close");
+        var overlay = document.getElementById("lp-modal-overlay");
+        var iframe = document.getElementById("lp-modal-iframe");
+
+        function openModal() {
+            iframe.src = YOUTUBE_EMBED_URL + "?autoplay=1";
+            overlay.classList.add("is-open");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            overlay.classList.remove("is-open");
+            iframe.src = "";
+            document.body.style.overflow = "";
+        }
+
+        openBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            openModal();
+        });
+
+        closeBtn.addEventListener("click", closeModal);
+
+        overlay.addEventListener("click", function (e) {
+            if (e.target === overlay) closeModal();
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && overlay.classList.contains("is-open")) closeModal();
+        });
+    })();
+</script>
 {% endblock %}
