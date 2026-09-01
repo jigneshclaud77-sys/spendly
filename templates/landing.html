@@ -79,10 +79,14 @@
         Spendly helps you log expenses, spot patterns, and stay
         on budget — without the spreadsheet headache.
     </p>
+    {% if session.user_id %}
+    <p class="lp-hero-subtitle">Welcome back, {{ session.user_name }}!</p>
+    {% else %}
     <div class="lp-hero-actions">
         <a href="{{ url_for('register') }}" class="lp-btn">Create free account</a>
         <a href="#" id="lp-how-it-works-btn" class="lp-btn">See how it works</a>
     </div>
+    {% endif %}
 
     <div class="lp-hero-visual">
         <div class="lp-window-dots">
@@ -200,10 +204,12 @@
             document.body.style.overflow = "";
         }
 
-        openBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            openModal();
-        });
+        if (openBtn) {
+            openBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+                openModal();
+            });
+        }
 
         closeBtn.addEventListener("click", closeModal);
 
