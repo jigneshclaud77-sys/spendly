@@ -1,10 +1,11 @@
 import sqlite3
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
-from database.db import get_db, init_db, seed_db, get_user_by_email, create_user
+from database.db import get_db, init_db, seed_db, get_user_by_email, create_user, verify_user
 
 app = Flask(__name__)
+app.secret_key = "dev-secret-key-not-for-production"  # dev-only, fine for this teaching scaffold
 
 with app.app_context():
     init_db()
@@ -52,9 +53,22 @@ def register():
     return redirect(url_for("login"))
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    if request.method == "GET":
+        return render_template("login.html")
+
+    email = request.form.get("email", "").strip().lower()
+    password = request.form.get("password", "")
+
+    user = verify_user(email, password)
+    if user is None:
+        return render_template("login.html", error="Invalid email or password.")
+
+    session["user_id"] = user["id"]
+    session["user_name"] = user["name"]
+
+    return redirect(url_for("landing"))
 
 
 @app.route("/terms")
@@ -67,14 +81,15 @@ def privacy():
     return render_template("privacy.html")
 
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("landing"))
+
+
 # ------------------------------------------------------------------ #
 # Placeholder routes — students will implement these                  #
 # ------------------------------------------------------------------ #
-
-@app.route("/logout")
-def logout():
-    return "Logout — coming in Step 3"
-
 
 @app.route("/profile")
 def profile():
