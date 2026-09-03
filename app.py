@@ -68,7 +68,7 @@ def login():
     session["user_id"] = user["id"]
     session["user_name"] = user["name"]
 
-    return redirect(url_for("landing"))
+    return redirect(url_for("profile"))
 
 
 @app.route("/terms")
@@ -87,14 +87,52 @@ def logout():
     return redirect(url_for("landing"))
 
 
+@app.route("/profile")
+def profile():
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    user = {
+        "name": "Demo User",
+        "email": "demo@spendly.com",
+        "initials": "DU",
+        "created_at": "2026-01-15",
+    }
+
+    categories = [
+        {"name": "Food", "total": 4200.00, "percent": 29.0},
+        {"name": "Bills", "total": 3600.00, "percent": 24.8},
+        {"name": "Shopping", "total": 2400.00, "percent": 16.6},
+        {"name": "Transport", "total": 1850.00, "percent": 12.8},
+        {"name": "Entertainment", "total": 1200.00, "percent": 8.3},
+        {"name": "Health", "total": 950.00, "percent": 6.6},
+        {"name": "Other", "total": 300.00, "percent": 2.1},
+    ]
+
+    stats = {
+        "total_spent": sum(c["total"] for c in categories),
+        "transaction_count": 24,
+        "top_category": categories[0]["name"],
+    }
+
+    expenses = [
+        {"date": "2026-09-02", "description": "Zomato order", "category": "Food", "amount": 450.00},
+        {"date": "2026-09-01", "description": "Ola ride to airport", "category": "Transport", "amount": 620.00},
+        {"date": "2026-08-29", "description": "Electricity bill (BESCOM)", "category": "Bills", "amount": 1450.00},
+        {"date": "2026-08-27", "description": "BookMyShow — movie tickets", "category": "Entertainment", "amount": 600.00},
+        {"date": "2026-08-25", "description": "Big Bazaar grocery run", "category": "Shopping", "amount": 1200.00},
+        {"date": "2026-08-22", "description": "Apollo Pharmacy", "category": "Health", "amount": 350.00},
+        {"date": "2026-08-20", "description": "DTH recharge (Tata Play)", "category": "Bills", "amount": 399.00},
+    ]
+
+    return render_template(
+        "profile.html", user=user, stats=stats, expenses=expenses, categories=categories
+    )
+
+
 # ------------------------------------------------------------------ #
 # Placeholder routes — students will implement these                  #
 # ------------------------------------------------------------------ #
-
-@app.route("/profile")
-def profile():
-    return "Profile page — coming in Step 4"
-
 
 @app.route("/expenses/add")
 def add_expense():
