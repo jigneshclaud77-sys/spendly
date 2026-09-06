@@ -1,4 +1,6 @@
+import calendar
 import sqlite3
+from datetime import date, datetime
 
 from flask import Flask, render_template, request, redirect, url_for, session
 
@@ -93,12 +95,64 @@ def logout():
     return redirect(url_for("landing"))
 
 
+def _parse_iso_date(value):
+    if not value:
+        return None
+    try:
+        parsed = datetime.strptime(value, "%Y-%m-%d")
+    except ValueError:
+        return None
+    return parsed.strftime("%Y-%m-%d")
+
+
+def _resolve_date_range(args):
+    date_from = _parse_iso_date(args.get("date_from"))
+    date_to = _parse_iso_date(args.get("date_to"))
+
+    if not (date_from and date_to):
+        return None, None, None
+
+    if date_from > date_to:
+        return None, None, "Start date must be before end date."
+
+    return date_from, date_to, None
+
+
+def _months_ago(d, months):
+    month_index = d.month - 1 - months
+    year = d.year + month_index // 12
+    month = month_index % 12 + 1
+    day = min(d.day, calendar.monthrange(year, month)[1])
+    return date(year, month, day)
+
+
+def _build_presets(active_date_from, active_date_to):
+    today = date.today()
+    preset_defs = [
+        ("This Month", date(today.year, today.month, 1).isoformat(), today.isoformat()),
+        ("Last 3 Months", _months_ago(today, 3).isoformat(), today.isoformat()),
+        ("Last 6 Months", _months_ago(today, 6).isoformat(), today.isoformat()),
+        ("All Time", None, None),
+    ]
+    return [
+        {
+            "label": label,
+            "date_from": preset_from,
+            "date_to": preset_to,
+            "active": (preset_from, preset_to) == (active_date_from, active_date_to),
+        }
+        for label, preset_from, preset_to in preset_defs
+    ]
+
+
 @app.route("/profile")
 def profile():
     if not session.get("user_id"):
         return redirect(url_for("login"))
 
     user_id = session["user_id"]
+
+    date_from, date_to, error = _resolve_date_range(request.args)
 
     raw_user = get_user_by_id(user_id)
     user = {
@@ -108,17 +162,27 @@ def profile():
         "created_at": raw_user["member_since"],
     }
 
-    stats = get_summary_stats(user_id)
-    expenses = get_recent_transactions(user_id)
+    stats = get_summary_stats(user_id, date_from, date_to)
+    expenses = get_recent_transactions(user_id, date_from=date_from, date_to=date_to)
 
-    raw_categories = get_category_breakdown(user_id)
+    raw_categories = get_category_breakdown(user_id, date_from, date_to)
     categories = [
         {"name": c["name"], "total": c["amount"], "percent": c["pct"]}
         for c in raw_categories
     ]
 
+    presets = _build_presets(date_from, date_to)
+
     return render_template(
-        "profile.html", user=user, stats=stats, expenses=expenses, categories=categories
+        "profile.html",
+        user=user,
+        stats=stats,
+        expenses=expenses,
+        categories=categories,
+        date_from=date_from,
+        date_to=date_to,
+        presets=presets,
+        error=error,
     )
 
 
